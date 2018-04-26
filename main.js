@@ -166,6 +166,10 @@ bot.on('callback_query', query => {
 
     if(data[0] === "details") {
         bot.forwardMessage(query.from.id, data[1], data[2]);
+        bot.editMessageText(query.message.chat.text + '\n\nЗапрос получен', {
+            chat_id: query.message.chat.id,
+            message_id: query.message.message_id
+        })
         bot.answerCallbackQuery(query.id);
         return;
     }
