@@ -21,6 +21,7 @@ const bot = new TelegramBot(token, {
 
 bot.setWebHook(url + ':443/bot' + token);
 
+
 const dist = {};
 const loc1 = {};
 const loc2 = {};
@@ -166,7 +167,7 @@ bot.on('callback_query', query => {
 
     if(data[0] === "details") {
         bot.forwardMessage(query.from.id, data[1], data[2]);
-        bot.editMessageText(query.message.chat.text + '\n\nЗапрос получен', {
+        bot.editMessageText(query.message.text + '\n\nЗапрос закрыт', {
             chat_id: query.message.chat.id,
             message_id: query.message.message_id
         })
