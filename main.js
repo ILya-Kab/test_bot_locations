@@ -174,21 +174,51 @@ bot.on('callback_query', query => {
 
 
 bot.onText(/\/addMe/, msg => {
-    if(bot.getChatMember(channel, msg.from.id)) {
-        bot.sendMessage(msg.chat.id, "Вы уже подписаны на канал");
-        return;
-    }
+    const chatId = msg.chat.id;
+    try {
+        bot.getChatMember(channel, chatId)
+            .then(data => {
+                if(data.status === "kicked") {
+                    bot.unbanChatMember(channel, chatId)
+                } else if (data.status === "member") {
+                    bot.sendMessage(chatId, "Вы уже подписаны на канал");
+                    return;
+                } else if (data.status === "administrator") {
+                    bot.sendMessage(chatId, "Вы администратор канала");
+                    return;
+                } else if (data.status === "creator") {
+                    bot.sendMessage(chatId, "Вы создатель канала");
+                    return;
+                }
 
-    bot.sendMessage(msg.chat.id, "%E2%8F%AC ⬇️ Чтобы подписатсья на канал нажмите на кнопку ⬇️", {
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "Присоединиться к каналу",
-                        url: config.get('invite')
+
+                bot.sendMessage(chatId, "⬇️ Чтобы подписатсья на канал нажмите на кнопку ⬇️", {
+                    reply_markup: {
+                        inline_keyboard: [
+                            [
+                                {
+                                    text: "Присоединиться к каналу",
+                                    url: config.get("invite")
+                                }
+                            ]
+                        ]
                     }
+                })
+            })
+
+    } catch (err) {
+
+        bot.sendMessage(chatId, "⬇️ Чтобы подписатсья на канал нажмите на кнопку ⬇️", {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: "Присоединиться к каналу",
+                            url: config.get("invite")
+                        }
+                    ]
                 ]
-            ]
-        }
-    })
+            }
+        })
+    }
 })
