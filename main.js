@@ -173,3 +173,22 @@ bot.on('callback_query', query => {
 });
 
 
+bot.onText(/\/addMe/, msg => {
+ /*   if(bot.getChatMember(channel, msg.from.id)) {
+        bot.sendMessage(msg.chat.id, "Вы уже подписаны на канал");
+        return;
+    }*/
+
+    bot.sendMessage(msg.chat.id, "%E2%8F%AC ⬇️ Чтобы подписатсья на канал нажмите на кнопку ⬇️", {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    {
+                        text: "Присоединиться к каналу",
+                        url: config.get('invite')
+                    }
+                ]
+            ]
+        }
+    })
+})
